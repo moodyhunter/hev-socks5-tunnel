@@ -10,12 +10,10 @@ STRIP=$(CROSS_PREFIX)strip
 CCFLAGS=-O3 -pipe -Wall -Werror $(CFLAGS) \
 		-I$(SRCDIR)/misc \
 		-I$(SRCDIR)/core/include  \
-		-I$(THIRDPARTDIR)/yaml/include \
 		-I$(THIRDPARTDIR)/lwip/src/include \
 		-I$(THIRDPARTDIR)/lwip/src/ports/include \
 		-I$(THIRDPARTDIR)/hev-task-system/include
 LDFLAGS=$(LFLAGS) \
-		-L$(THIRDPARTDIR)/yaml/bin -lyaml \
 		-L$(THIRDPARTDIR)/lwip/bin -llwip \
 		-L$(THIRDPARTDIR)/hev-task-system/bin -lhev-task-system \
 		-lpthread
@@ -31,8 +29,7 @@ CONFIG=$(CONFDIR)/main.yml
 EXEC_TARGET=$(BINDIR)/hev-socks5-tunnel
 STATIC_TARGET=$(BINDIR)/lib$(PROJECT).a
 SHARED_TARGET=$(BINDIR)/lib$(PROJECT).so
-THIRDPARTS=$(THIRDPARTDIR)/yaml \
-		   $(THIRDPARTDIR)/lwip \
+THIRDPARTS=$(THIRDPARTDIR)/lwip \
 		   $(THIRDPARTDIR)/hev-task-system
 
 $(SHARED_TARGET) : CCFLAGS+=-fPIC

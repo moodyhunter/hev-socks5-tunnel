@@ -22,7 +22,6 @@
 #include "hev-utils.h"
 #include "hev-config.h"
 #include "hev-logger.h"
-#include "hev-config-const.h"
 
 #include "hev-socks5-session-tcp.h"
 

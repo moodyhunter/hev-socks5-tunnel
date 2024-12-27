@@ -26,12 +26,10 @@
 #include <hev-task-system.h>
 #include <hev-memory-allocator.h>
 
-#include "hev-exec.h"
 #include "hev-list.h"
 #include "hev-compiler.h"
 #include "hev-config.h"
 #include "hev-logger.h"
-#include "hev-tunnel.h"
 #include "hev-socks5-session-tcp.h"
 #include "hev-socks5-session-udp.h"
 
@@ -39,7 +37,6 @@
 
 static int run;
 static int tun_fd = -1;
-static int tun_fd_local;
 static int event_fds[2] = { -1, -1 };
 
 static size_t stat_tx_packets;
@@ -292,75 +289,18 @@ lwip_timer_task_entry (void *data)
 static int
 tunnel_init (int extern_tun_fd)
 {
-    const char *script_path, *name, *ipv4, *ipv6;
-    int multi_queue, res;
-    unsigned int mtu;
-
-    if (extern_tun_fd >= 0) {
-        tun_fd = extern_tun_fd;
-        return 0;
-    }
-
-    name = hev_config_get_tunnel_name ();
-    multi_queue = hev_config_get_tunnel_multi_queue ();
-    tun_fd = hev_tunnel_open (name, multi_queue);
+    tun_fd = extern_tun_fd;
     if (tun_fd < 0) {
         LOG_E ("socks5 tunnel open (%s)", strerror (errno));
         return -1;
     }
 
-    mtu = hev_config_get_tunnel_mtu ();
-    res = hev_tunnel_set_mtu (mtu);
-    if (res < 0) {
-        LOG_E ("socks5 tunnel mtu");
-        return -1;
-    }
-
-    ipv4 = hev_config_get_tunnel_ipv4_address ();
-    if (ipv4) {
-        res = hev_tunnel_set_ipv4 (ipv4, 32);
-        if (res < 0) {
-            LOG_E ("socks5 tunnel ipv4");
-            return -1;
-        }
-    }
-
-    ipv6 = hev_config_get_tunnel_ipv6_address ();
-    if (ipv6) {
-        res = hev_tunnel_set_ipv6 (ipv6, 128);
-        if (res < 0) {
-            LOG_E ("socks5 tunnel ipv6");
-            return -1;
-        }
-    }
-
-    res = hev_tunnel_set_state (1);
-    if (res < 0) {
-        LOG_E ("socks5 tunnel state");
-        return -1;
-    }
-
-    script_path = hev_config_get_tunnel_post_up_script ();
-    if (script_path)
-        hev_exec_run (script_path, hev_tunnel_get_name (), 0);
-
-    tun_fd_local = 1;
     return 0;
 }
 
 static void
 tunnel_fini (void)
 {
-    const char *script_path;
-
-    if (!tun_fd_local)
-        return;
-
-    script_path = hev_config_get_tunnel_pre_down_script ();
-    if (script_path)
-        hev_exec_run (script_path, hev_tunnel_get_name (), 1);
-
-    hev_tunnel_close (tun_fd);
     tun_fd = -1;
 }
 

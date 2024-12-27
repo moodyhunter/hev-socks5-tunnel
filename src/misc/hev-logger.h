@@ -10,16 +10,18 @@
 #ifndef __HEV_LOGGER_H__
 #define __HEV_LOGGER_H__
 
-#define LOG_D(fmt...) hev_logger_log (HEV_LOGGER_DEBUG, fmt)
-#define LOG_I(fmt...) hev_logger_log (HEV_LOGGER_INFO, fmt)
-#define LOG_W(fmt...) hev_logger_log (HEV_LOGGER_WARN, fmt)
-#define LOG_E(fmt...) hev_logger_log (HEV_LOGGER_ERROR, fmt)
+void my_hev_logger_log (int x, ...);
 
-#define LOG_ON() hev_logger_enabled (HEV_LOGGER_UNSET)
-#define LOG_ON_D() hev_logger_enabled (HEV_LOGGER_DEBUG)
-#define LOG_ON_I() hev_logger_enabled (HEV_LOGGER_INFO)
-#define LOG_ON_W() hev_logger_enabled (HEV_LOGGER_WARN)
-#define LOG_ON_E() hev_logger_enabled (HEV_LOGGER_ERROR)
+#define LOG_D(fmt...) my_hev_logger_log (HEV_LOGGER_DEBUG, fmt)
+#define LOG_I(fmt...) my_hev_logger_log (HEV_LOGGER_INFO, fmt)
+#define LOG_W(fmt...) my_hev_logger_log (HEV_LOGGER_WARN, fmt)
+#define LOG_E(fmt...) my_hev_logger_log (HEV_LOGGER_ERROR, fmt)
+
+#define LOG_ON() 1
+#define LOG_ON_D() 1
+#define LOG_ON_I() 1
+#define LOG_ON_W() 1
+#define LOG_ON_E() 1
 
 typedef enum
 {

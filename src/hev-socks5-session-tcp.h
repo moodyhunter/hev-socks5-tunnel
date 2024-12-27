@@ -10,6 +10,7 @@
 #ifndef __HEV_SOCKS5_SESSION_TCP_H__
 #define __HEV_SOCKS5_SESSION_TCP_H__
 
+#include "hev-task-mutex.h"
 #include <hev-ring-buffer.h>
 #include <hev-socks5-client-tcp.h>
 

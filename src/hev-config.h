@@ -23,20 +23,7 @@ struct _HevConfigServer
     char addr[256];
 };
 
-int hev_config_init_from_file (const char *config_path);
-int hev_config_init_from_str (const unsigned char *config_str,
-                              unsigned int config_len);
-void hev_config_fini (void);
-
-const char *hev_config_get_tunnel_name (void);
 unsigned int hev_config_get_tunnel_mtu (void);
-int hev_config_get_tunnel_multi_queue (void);
-
-const char *hev_config_get_tunnel_ipv4_address (void);
-const char *hev_config_get_tunnel_ipv6_address (void);
-
-const char *hev_config_get_tunnel_post_up_script (void);
-const char *hev_config_get_tunnel_pre_down_script (void);
 
 HevConfigServer *hev_config_get_socks5_server (void);
 

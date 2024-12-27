@@ -10,6 +10,7 @@
 #ifndef __HEV_SOCKS5_SESSION_UDP_H__
 #define __HEV_SOCKS5_SESSION_UDP_H__
 
+#include "hev-task-mutex.h"
 #include <hev-socks5-client-udp.h>
 
 #include "hev-socks5-session.h"
