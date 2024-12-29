@@ -46,7 +46,9 @@ hev_socks5_client_connect_server (HevSocks5Client *self, const char *addr,
         LOG_E ("%p socks5 client socket", self);
         return -1;
     }
-    self->base.fd_up (fd);
+
+    if (self->base.fd_up)
+        self->base.fd_up (fd);
 
     sap = (struct sockaddr *)&saddr;
     klass = HEV_OBJECT_GET_CLASS (self);

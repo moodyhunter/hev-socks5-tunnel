@@ -10,7 +10,10 @@
 #ifndef __HEV_MAIN_H__
 #define __HEV_MAIN_H__
 
+#include "hev-logger.h"
+#include <bits/alltypes.h>
 #include <stddef.h>
+#include <stdarg.h>
 
 typedef struct _HevConfigServer
 {
@@ -33,6 +36,7 @@ struct Config
     int connect_timeout = 5000;
     int read_write_timeout = 60000;
     int limit_nofile = 65535;
+    void (*logging)  (HevLoggerLevel level, const char *fmt, va_list ap) ;
 };
 #else
 typedef struct Config
@@ -44,6 +48,7 @@ typedef struct Config
     int connect_timeout;
     int read_write_timeout;
     int limit_nofile;
+    void (*logging)  (HevLoggerLevel level, const char *fmt, va_list ap) ;
 } Config;
 #endif
 

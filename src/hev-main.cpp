@@ -16,6 +16,7 @@
 
 #include "hev-logger.h"
 #include "hev-socks5-tunnel.h"
+#include <stdarg.h>
 
 #include "hev-main.h"
 
@@ -24,34 +25,24 @@ extern "C" {
 int
 hev_socks5_tunnel_main (int tun_fd)
 {
-    int nofile;
-    int res;
-
-    res = hev_logger_init (HEV_LOGGER_DEBUG);
-    if (res < 0)
-        return -2;
-
     LOG_D ("socks5 tunnel start");
 
-    nofile = hev_config.limit_nofile;
-    res = set_limit_nofile (nofile);
-    if (res < 0)
-        LOG_W ("set limit nofile");
+    const auto nfiles = hev_config.limit_nofile;
 
-    res = hev_task_system_init ();
-    if (res < 0)
-        return -3;
+    if (set_limit_nofile (nfiles) < 0)
+        LOG_W ("set limit no.file");
+
+    if (hev_task_system_init () < 0)
+        return __COUNTER__;
 
     lwip_init ();
 
-    res = hev_socks5_tunnel_init (tun_fd);
-    if (res < 0)
-        return -4;
+    if (hev_socks5_tunnel_init (tun_fd) < 0)
+        return __COUNTER__;
 
     hev_socks5_tunnel_run ();
 
     hev_socks5_tunnel_fini ();
-    hev_logger_fini ();
     hev_task_system_fini ();
 
     return 0;
@@ -63,11 +54,12 @@ hev_socks5_tunnel_quit (void)
     hev_socks5_tunnel_stop ();
 }
 
-int
-main ()
+void
+hev_logger_log (HevLoggerLevel level, const char *fmt, ...)
 {
-    hev_socks5_tunnel_main (1);
-
-    hev_socks5_tunnel_quit ();
+    va_list list;
+    va_start (list, fmt);
+    hev_config.logging (level, fmt, list);
+    va_end (list);
 }
 }

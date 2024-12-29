@@ -34,10 +34,6 @@ typedef enum
 extern "C" {
 #endif
 
-int hev_logger_init (HevLoggerLevel level);
-void hev_logger_fini (void);
-
-int hev_logger_enabled (HevLoggerLevel level);
 void hev_logger_log (HevLoggerLevel level, const char *fmt, ...);
 
 #ifdef __cplusplus

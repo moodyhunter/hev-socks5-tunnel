@@ -172,10 +172,9 @@ target_compile_definitions(HevTaskSystem
     CONFIG_SCHED_CLOCK=CLOCK_NONE
 )
 
-# add_library(HevSocks5Tunnel STATIC
-add_executable(HevSocks5Tunnel
+add_library(HevSocks5Tunnel STATIC
+# add_executable(HevSocks5Tunnel
     ${CMAKE_CURRENT_LIST_DIR}/src/hev-main.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/hev-logger.c
     ${CMAKE_CURRENT_LIST_DIR}/src/hev-socks5-tunnel.c
     ${CMAKE_CURRENT_LIST_DIR}/src/hev-socks5-session.c
     ${CMAKE_CURRENT_LIST_DIR}/src/hev-socks5-session-udp.c
@@ -197,8 +196,9 @@ add_executable(HevSocks5Tunnel
 )
 
 target_include_directories(HevSocks5Tunnel
-    PRIVATE
+    PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/src/
+    PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/src/misc
     ${CMAKE_CURRENT_LIST_DIR}/src/socks5
 )
@@ -208,4 +208,3 @@ target_link_libraries(HevSocks5Tunnel
     lwip
     HevTaskSystem
 )
-
