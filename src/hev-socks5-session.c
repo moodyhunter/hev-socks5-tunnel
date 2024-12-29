@@ -7,10 +7,9 @@
  ============================================================================
  */
 
-#include <string.h>
-
 #include "hev-logger.h"
-#include "hev-config.h"
+
+#include "hev-main.h"
 #include "hev-socks5-client.h"
 
 #include "hev-socks5-session.h"
@@ -26,9 +25,9 @@ hev_socks5_session_run (HevSocks5Session *self)
 
     LOG_D ("%p socks5 session run", self);
 
-    srv = hev_config_get_socks5_server ();
-    connect_timeout = hev_config_get_misc_connect_timeout ();
-    read_write_timeout = hev_config_get_misc_read_write_timeout ();
+    srv = &hev_config.srv;
+    connect_timeout = hev_config.connect_timeout;
+    read_write_timeout = hev_config.read_write_timeout;
 
     hev_socks5_set_timeout (HEV_SOCKS5 (self), connect_timeout);
 

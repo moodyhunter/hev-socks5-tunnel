@@ -7,6 +7,7 @@
  ============================================================================
  */
 
+#include "hev-main.h"
 #include <string.h>
 
 #include <lwip/udp.h>
@@ -20,12 +21,13 @@
 #include <hev-socks5-misc.h>
 
 #include "hev-utils.h"
-#include "hev-config.h"
 #include "hev-logger.h"
 #include "hev-compiler.h"
-#include "hev-config-const.h"
 
 #include "hev-socks5-session-udp.h"
+
+static const int UDP_BUF_SIZE = 1500;
+static const int UDP_POOL_SIZE = 512;
 
 #define task_io_yielder hev_socks5_task_io_yielder
 
@@ -219,7 +221,7 @@ hev_socks5_session_udp_bind (HevSocks5 *self, int fd,
 
     LOG_D ("%p socks5 session udp bind", self);
 
-    srv = hev_config_get_socks5_server ();
+    srv = &hev_config.srv;
     mark = srv->mark;
 
     if (mark) {
@@ -273,7 +275,7 @@ hev_socks5_session_udp_splice (HevSocks5Session *base)
     if (hev_task_mod_fd (task, fd, POLLOUT) < 0)
         hev_task_add_fd (task, fd, POLLOUT);
 
-    stack_size = hev_config_get_misc_task_stack_size ();
+    stack_size = hev_config.task_stack_size;
     task = hev_task_new (stack_size);
     hev_task_ref (task);
     hev_task_run (task, splice_task_entry, self);
@@ -316,7 +318,7 @@ int
 hev_socks5_session_udp_construct (HevSocks5SessionUDP *self,
                                   struct udp_pcb *pcb, HevTaskMutex *mutex)
 {
-    HevConfigServer *srv = hev_config_get_socks5_server ();
+    HevConfigServer *srv = &hev_config.srv;
     int type;
     int res;
 

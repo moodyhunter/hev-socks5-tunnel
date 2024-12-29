@@ -16,7 +16,7 @@
 #include <hev-memory-allocator.h>
 
 #include "hev-socks5-misc-priv.h"
-#include "hev-socks5-logger-priv.h"
+#include "hev-logger.h"
 
 #include "hev-socks5-client.h"
 
@@ -46,6 +46,7 @@ hev_socks5_client_connect_server (HevSocks5Client *self, const char *addr,
         LOG_E ("%p socks5 client socket", self);
         return -1;
     }
+    self->base.fd_up (fd);
 
     sap = (struct sockaddr *)&saddr;
     klass = HEV_OBJECT_GET_CLASS (self);
@@ -333,7 +334,7 @@ hev_socks5_client_connect_fd (HevSocks5Client *self, int fd)
 
     LOG_D ("%p socks5 client connect fd %d", self, fd);
 
-    HEV_SOCKS5 (self)->fd = fd;
+    ((HevSocks5 *)self)->fd = fd;
 
     res = hev_task_add_fd (task, fd, POLLIN | POLLOUT);
     if (res < 0)

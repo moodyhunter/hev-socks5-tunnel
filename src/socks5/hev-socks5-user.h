@@ -12,7 +12,7 @@
 
 #include <hev-object-atomic.h>
 
-#include "hev-rbtree.h"
+#include "rbtree/hev-rbtree.h"
 
 #ifdef __cplusplus
 extern "C" {

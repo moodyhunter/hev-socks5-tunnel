@@ -7,6 +7,7 @@
  ============================================================================
  */
 
+#include "hev-main.h"
 #include <errno.h>
 #include <string.h>
 
@@ -20,7 +21,7 @@
 #include <hev-socks5-misc.h>
 
 #include "hev-utils.h"
-#include "hev-config.h"
+
 #include "hev-logger.h"
 
 #include "hev-socks5-session-tcp.h"
@@ -173,7 +174,7 @@ hev_socks5_session_tcp_bind (HevSocks5 *self, int fd,
 
     LOG_D ("%p socks5 session tcp bind", self);
 
-    srv = hev_config_get_socks5_server ();
+    srv = &hev_config.srv;
     mark = srv->mark;
 
     if (mark) {
@@ -200,7 +201,7 @@ hev_socks5_session_tcp_splice (HevSocks5Session *base)
     if (!self->pcb)
         return;
 
-    tcp_buffer_size = hev_config_get_misc_tcp_buffer_size ();
+    tcp_buffer_size = hev_config.tcp_buffer_size;
     self->buffer = hev_ring_buffer_alloca (tcp_buffer_size);
     if (!self->buffer)
         return;

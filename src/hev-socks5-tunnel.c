@@ -7,6 +7,8 @@
  ============================================================================
  */
 
+#include "hev-main.h"
+#include "hev-socks5-session.h"
 #include <errno.h>
 #include <signal.h>
 #include <string.h>
@@ -26,9 +28,9 @@
 #include <hev-task-system.h>
 #include <hev-memory-allocator.h>
 
-#include "hev-list.h"
+#include "list/hev-list.h"
 #include "hev-compiler.h"
-#include "hev-config.h"
+
 #include "hev-logger.h"
 #include "hev-socks5-session-tcp.h"
 #include "hev-socks5-session-udp.h"
@@ -143,7 +145,7 @@ tcp_accept_handler (void *arg, struct tcp_pcb *pcb, err_t err)
     if (!tcp)
         return ERR_MEM;
 
-    stack_size = hev_config_get_misc_task_stack_size ();
+    stack_size = hev_config.task_stack_size;
     task = hev_task_new (stack_size);
     if (!task) {
         hev_object_unref (HEV_OBJECT (tcp));
@@ -174,7 +176,7 @@ udp_recv_handler (void *arg, struct udp_pcb *pcb, struct pbuf *p,
         return;
     }
 
-    stack_size = hev_config_get_misc_task_stack_size ();
+    stack_size = hev_config.task_stack_size;
     task = hev_task_new (stack_size);
     if (!task) {
         hev_object_unref (HEV_OBJECT (udp));
@@ -214,7 +216,7 @@ event_task_entry (void *data)
 static void
 lwip_io_task_entry (void *data)
 {
-    const unsigned int mtu = hev_config_get_tunnel_mtu ();
+    const unsigned int mtu = hev_config.tun_mtu;
 
     LOG_D ("socks5 tunnel lwip task run");
 

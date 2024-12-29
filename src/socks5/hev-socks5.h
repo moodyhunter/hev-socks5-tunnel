@@ -28,6 +28,8 @@ typedef struct _HevSocks5Class HevSocks5Class;
 typedef enum _HevSocks5Type HevSocks5Type;
 typedef enum _HevSocks5DomainAddrType HevSocks5DomainAddrType;
 
+typedef void (*HevSocks5FdListener) (int fd);
+
 enum _HevSocks5Type
 {
     HEV_SOCKS5_TYPE_NONE,
@@ -51,6 +53,8 @@ struct _HevSocks5
     int timeout;
     HevSocks5Type type;
     HevSocks5DomainAddrType domain_addr_type;
+    HevSocks5FdListener fd_up;
+    HevSocks5FdListener fd_down;
 
     void *data;
 };

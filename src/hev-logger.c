@@ -11,30 +11,18 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <string.h>
 #include <unistd.h>
 #include <sys/uio.h>
 #include <sys/stat.h>
 
 #include "hev-logger.h"
 
-static int fd = -1;
 static HevLoggerLevel req_level;
 
 int
-hev_logger_init (HevLoggerLevel level, const char *path)
+hev_logger_init (HevLoggerLevel level)
 {
     req_level = level;
-
-    if (0 == strcmp (path, "stdout"))
-        fd = dup (1);
-    else if (0 == strcmp (path, "stderr"))
-        fd = dup (2);
-    else
-        fd = open (path, O_WRONLY | O_APPEND | O_CREAT, 0640);
-
-    if (fd < 0)
-        return -1;
 
     return 0;
 }
@@ -42,13 +30,12 @@ hev_logger_init (HevLoggerLevel level, const char *path)
 void
 hev_logger_fini (void)
 {
-    close (fd);
 }
 
 int
 hev_logger_enabled (HevLoggerLevel level)
 {
-    if (fd >= 0 && level >= req_level)
+    if (level >= req_level)
         return 1;
 
     return 0;
@@ -66,7 +53,7 @@ hev_logger_log (HevLoggerLevel level, const char *fmt, ...)
     va_list ap;
     int len;
 
-    if (fd < 0 || level < req_level)
+    if (level < req_level)
         return;
 
     time (&now);
@@ -106,7 +93,7 @@ hev_logger_log (HevLoggerLevel level, const char *fmt, ...)
     iov[3].iov_base = "\n";
     iov[3].iov_len = 1;
 
-    if (writev (fd, iov, 4)) {
+    if (writev (STDOUT_FILENO, iov, 4)) {
         /* ignore return value */
     }
 }

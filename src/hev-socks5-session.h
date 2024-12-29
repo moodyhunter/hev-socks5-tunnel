@@ -12,7 +12,8 @@
 
 #include <hev-task.h>
 
-#include "hev-list.h"
+#include "list/hev-list.h"
+#include "hev-socks5-client.h"
 
 #define HEV_SOCKS5_SESSION(p) ((HevSocks5Session *)p)
 #define HEV_SOCKS5_SESSION_IFACE(p) ((HevSocks5SessionIface *)p)
@@ -27,6 +28,7 @@ struct _HevSocks5SessionData
     HevListNode node;
     HevTask *task;
     HevSocks5Session *self;
+    HevSocks5FdListener fd_listener;
 };
 
 struct _HevSocks5SessionIface

@@ -9,7 +9,7 @@
 
 #include "hev-socks5.h"
 #include "hev-socks5-misc-priv.h"
-#include "hev-socks5-logger-priv.h"
+#include "hev-logger.h"
 
 #include "hev-socks5-tcp.h"
 

@@ -10,12 +10,10 @@
 #ifndef __HEV_LOGGER_H__
 #define __HEV_LOGGER_H__
 
-void my_hev_logger_log (int x, ...);
-
-#define LOG_D(fmt...) my_hev_logger_log (HEV_LOGGER_DEBUG, fmt)
-#define LOG_I(fmt...) my_hev_logger_log (HEV_LOGGER_INFO, fmt)
-#define LOG_W(fmt...) my_hev_logger_log (HEV_LOGGER_WARN, fmt)
-#define LOG_E(fmt...) my_hev_logger_log (HEV_LOGGER_ERROR, fmt)
+#define LOG_D(fmt...) hev_logger_log (HEV_LOGGER_DEBUG, fmt)
+#define LOG_I(fmt...) hev_logger_log (HEV_LOGGER_INFO, fmt)
+#define LOG_W(fmt...) hev_logger_log (HEV_LOGGER_WARN, fmt)
+#define LOG_E(fmt...) hev_logger_log (HEV_LOGGER_ERROR, fmt)
 
 #define LOG_ON() 1
 #define LOG_ON_D() 1
@@ -32,10 +30,18 @@ typedef enum
     HEV_LOGGER_UNSET,
 } HevLoggerLevel;
 
-int hev_logger_init (HevLoggerLevel level, const char *path);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int hev_logger_init (HevLoggerLevel level);
 void hev_logger_fini (void);
 
 int hev_logger_enabled (HevLoggerLevel level);
 void hev_logger_log (HevLoggerLevel level, const char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __HEV_LOGGER_H__ */

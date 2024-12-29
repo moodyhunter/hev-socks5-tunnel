@@ -10,8 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "hev-socks5-logger-priv.h"
-
+#include "hev-logger.h"
 #include "hev-socks5-user.h"
 
 HevSocks5User *

@@ -11,7 +11,7 @@
 #include <string.h>
 
 #include "hev-compiler.h"
-#include "hev-socks5-logger-priv.h"
+#include "hev-logger.h"
 
 #include "hev-socks5-authenticator.h"
 

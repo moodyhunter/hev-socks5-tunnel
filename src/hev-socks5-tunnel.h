@@ -13,14 +13,15 @@
 #include "hev-task.h"
 #include "hev-task-io.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int hev_socks5_tunnel_init (int tun_fd);
 void hev_socks5_tunnel_fini (void);
 
 int hev_socks5_tunnel_run (void);
 void hev_socks5_tunnel_stop (void);
-
-void hev_socks5_tunnel_stats (size_t *tx_packets, size_t *tx_bytes,
-                              size_t *rx_packets, size_t *rx_bytes);
 
 static inline ssize_t
 hev_tunnel_read (int fd, void *buf, size_t count, HevTaskIOYielder yielder,
@@ -49,5 +50,9 @@ hev_tunnel_writev (int fd, struct iovec *iov, int iovcnt,
 {
     return hev_task_io_writev (fd, &iov[1], iovcnt - 1, yielder, yielder_data);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __HEV_SOCKS5_TUNNEL_H__ */
